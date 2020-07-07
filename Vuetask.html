@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>jstask</title>
+</head>
+
+<body>
+    <p>STEP1</p>
+    <p>お客様の情報を入力してください</p>
+    <div id="dates">
+        <select id="year" v-model="year">
+            <option v-for="year in getYears()" name="year" :value="year">{{ year }}</option>
+        </select>
+        <label>年</label>
+
+        <select id="month" v-model="month">
+            <option v-for="month in months" name="month" :value="month">{{ month }}</option>
+        </select>
+        <label>月</label>
+
+        <select id="date" v-model="date">
+            <option v-for="date in getDates(year, month)" name="date" :value="date">{{ date }}</option>
+        </select>
+        <label>日</label>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.11"></script>
+    <script src="https://unpkg.com/vue-router/dist/vue-router.js"></script>
+    <script>
+
+        const vm = new Vue({
+            el: '#dates',
+            data: {
+                year: '',
+                nengo: "",
+                month: '',
+                date: '',
+                months: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+            },
+            methods: {
+                getYears: function () {
+                    const date = new Date();
+                    const yearList = [];
+                    let wareki = "";
+                    for (let i = 2020; i >= 1919; i--) {
+                        if (i > 2018) {
+                            wareki = "(令和" + (i - 2018) + "年)";
+                        } else if (i > 1988) {
+                            wareki = "(平成" + (i - 1988) + "年)";
+                        } else if (i > 1925) {
+                            wareki = "(昭和" + (i - 1925) + "年)";
+                        } else if (i > 1911) {
+                            wareki = "(大正" + (i - 1911) + "年)";
+                        }
+                        const birthyear = i + wareki;
+                        yearList.push(birthyear);
+                    }
+                    return yearList;
+                },
+                getDates: function (year, month) {
+                    const dateList = [];
+                    const lastday = ['', 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+                    if ((year % 4 == 0 && year % 100 != 0) || year % 400 == 0) {
+                        lastday[2] = 29;
+                        for (let i = 1; i <= lastday[month]; i++) {
+                            dateList.push(i);
+                        }
+                    }
+                    console.log(dateList);
+                    return dateList;
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>
